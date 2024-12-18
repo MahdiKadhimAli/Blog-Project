@@ -1,3 +1,9 @@
+@php
+    $Headercategories =App\Models\Category::take(3)->get();
+@endphp
+
+
+
 <!--================Header Menu Area =================-->
   <header class="header_area">
     <div class="main_menu">
@@ -15,30 +21,44 @@
             <ul class="nav navbar-nav menu_nav justify-content-center">
               <li class="nav-item @yield('home-active')"><a class="nav-link" href="{{route('theme.index')}}">Home</a></li>
               <li class="nav-item @yield('category-active') submenu dropdown">
-                <a href="{{route('theme.category')}}" class="nav-link  dropdown-toggle " data-toggle="dropdown" role="button" aria-haspopup="true"
+                <a href="#" class="nav-link  dropdown-toggle " data-toggle="dropdown" role="button" aria-haspopup="true"
                   aria-expanded="false">Categories</a>
-                <ul class="dropdown-menu">
-                  <li class="nav-item"><a class="nav-link" href="{{route('theme.category')}}">Food</a></li>
-                  <li class="nav-item"><a class="nav-link" href="{{route('theme.category')}}">Bussiness</a></li>
-                  <li class="nav-item"><a class="nav-link" href="{{route('theme.category')}}">Travel</a></li>
+                  @if (count($Headercategories)>0)
+                       <ul class="dropdown-menu">
+                        @foreach ( $Headercategories as $category )
+                  <li class="nav-item"><a class="nav-link" href="{{ route('theme.category',[ 'id' => $category->id ]) }}">{{ $category->name }}</a></li>
+                        @endforeach
                 </ul>
+                  @endif
+
               </li>
               <li class="nav-item @yield('contact-active')"><a class="nav-link " href="{{route('theme.contact')}}">Contact</a></li>
             </ul>
-
+            @if (Auth::check())
             <!-- Add new blog -->
-            <a href="#" class="btn btn-sm btn-primary mr-2">Add New</a>
+            <a href="{{route('bloge.create')}}" class="btn btn-sm btn-primary mr-2">Add New</a>
             <!-- End - Add new blog -->
-
+                @endif
             <ul class="nav navbar-nav navbar-right navbar-social">
+                @if ( !Auth::check())
               <a href="{{route('register')}}" class="btn btn-sm btn-warning">Register / Login</a>
-              <!-- <li class="nav-item submenu dropdown">
+              @else
+                 <li class="nav-item submenu dropdown">
                 <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
-                  aria-expanded="false">Welcome User</a>
+                  aria-expanded="false">{{Auth::user()->name}}</a>
                 <ul class="dropdown-menu">
-                  <li class="nav-item"><a class="nav-link" href="blog-details.html">My Blogs</a></li>
+                  <li class="nav-item"><a class="nav-link" href="{{route('blog.my-blogs')}}">My Blogs</a></li>
+
+                <form action="{{route('logout')}}"id="logout_form" method="post">
+                    @csrf
+                    <li class="nav-item"><a class="nav-link" href="javascript:$('form#logout_form').submit(); ">Logout</a></li>
+                  </form>
+
                 </ul>
-              </li> -->
+              </li>
+                @endif
+
+
             </ul>
           </div>
         </div>

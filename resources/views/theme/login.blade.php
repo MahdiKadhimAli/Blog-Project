@@ -15,7 +15,7 @@
             @csrf
 
             <div class="form-group">
-              <input class="form-control border" name="email" id="email" type="email" value="old('email')" placeholder="Enter email address">
+              <input class="form-control border" name="email" id="email" type="email"   placeholder="Enter email address">
                           <x-input-error :messages="$errors->get('email')" class="mt-2" />
 
             </div>
